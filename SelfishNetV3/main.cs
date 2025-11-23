@@ -14,36 +14,37 @@ using System.Diagnostics;
 
 namespace SelfishNetv3
 {
-    public partial class main : Form
+    public partial class Main : Form
     {
-        public main()
+        public Main()
         {
             InitializeComponent();
-            customizeDesign();
+            CustomizeDesign();
         }
 
-        private void main_Load(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
 
         }
 
-        int panelBarraTituloColor = Color.FromArgb(23, 148, 67).ToArgb();
+        // Color definitions
+        int titleBarColor = Color.FromArgb(23, 148, 67).ToArgb();
         int mainColor = Color.FromArgb(29, 185, 84).ToArgb();
         int secondaryColor = Color.FromArgb(29, 210, 84).ToArgb();
         int pressedColor = Color.FromArgb(23, 148, 67).ToArgb();
 
-        #region Funcionalidades del formulario
-        //RESIZE METODO PARA REDIMENCIONAR/CAMBIAR TAMAÑO A FORMULARIO EN TIEMPO DE EJECUCION ----------------------------------------------------------
+        #region Form Functionalities
+        // RESIZE METHOD TO RESIZE FORM AT RUNTIME ----------------------------------------------------------
         private int tolerance = 12;
         private const int WM_NCHITTEST = 132;
         private const int HTBOTTOMRIGHT = 17;
         private Rectangle sizeGripRectangle;
 
-        //METODO PARA ARRASTRAR EL FORMULARIO
+        // METHOD TO DRAG THE FORM
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
 
-        //AGREGA LA FUENTE "Computerfont" AL SISTEMA        
+        // ADDS "Computerfont" TO THE SYSTEM        
         [DllImport("gdi32", EntryPoint = "AddFontResource")]
         public static extern int AddFontResourceA(string lpFileName);
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
@@ -69,7 +70,7 @@ namespace SelfishNetv3
             }
         }
 
-        //DIBUJAR RECTANGULO / EXCLUIR ESQUINA PANEL 
+        // DRAW RECTANGLE / EXCLUDE CORNER PANEL 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -82,7 +83,7 @@ namespace SelfishNetv3
             this.Invalidate();
         }
 
-        //COLOR Y GRIP DE RECTANGULO INFERIOR
+        // COLOR AND GRIP OF BOTTOM RECTANGLE
         protected override void OnPaint(PaintEventArgs e)
         {
             //SolidBrush greenBrush = new SolidBrush(Color.FromArgb(23, 148, 67));
@@ -93,20 +94,20 @@ namespace SelfishNetv3
             ControlPaint.DrawSizeGrip(e.Graphics, Color.Transparent, sizeGripRectangle);
         }
 
-        //BOTONES DEL PANEL DE TITULO
+        // TITLE BAR BUTTONS
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-            var confirmarSalida = MessageBox.Show("¿Está seguro que desea salir de la aplicación?",
-                "Confirme que desea salir de la aplicación.", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var confirmExit = MessageBox.Show("Are you sure you want to exit the application?",
+                "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (confirmarSalida == DialogResult.Yes)
+            if (confirmExit == DialogResult.Yes)
             {
                 ArpForm.instance.Dispose();
                 Environment.Exit(0);
             }
         }
 
-        //Capturar posicion y tamaño antes de maximizar para restaurar
+        // Capture position and size before maximizing to restore later
         int lx, ly;
         int sw, sh;
         private void panelBarraTitulo_MouseMove(object sender, MouseEventArgs e)
@@ -172,21 +173,21 @@ namespace SelfishNetv3
 
         //Font computerFont = new Font("Computerfont", 71, FontStyle.Regular);
 
-        private void setFont()
+        private void SetFont()
         {
             titulo.Font = new Font("Computerfont", 71);
         }
 
-        //FUNCIONALIDADES DE PANEL MENU
-        private void customizeDesign()
+        // MENU PANEL FUNCTIONALITIES
+        private void CustomizeDesign()
         {
             panelSubMenuARPAttack.Visible = false;
             panelSubMenuInfo.Visible = false;
             RegisterFont("Computerfont.ttf");
-            setFont();
+            SetFont();
         }
 
-        private void hideSubMenu()
+        private void HideSubMenu()
         {
             if (panelSubMenuARPAttack.Visible == true)
             {
@@ -201,11 +202,11 @@ namespace SelfishNetv3
             }
         }
 
-        private void showSubMenu(Panel subMenu, Button button)
+        private void ShowSubMenu(Panel subMenu, Button button)
         {
             if (subMenu.Visible == false)
             {
-                hideSubMenu();
+                HideSubMenu();
                 subMenu.Visible = true;
             }
             else
@@ -215,23 +216,23 @@ namespace SelfishNetv3
             }
         }
 
-        //BOTONES DEL PANEL DERECHO-----------------------------------------------------------------------
-        //BOTONES DE PRODUCTO Y SUBMENU PANEL PRODUCTO
+        // RIGHT PANEL BUTTONS -----------------------------------------------------------------------
+        // PRODUCT BUTTONS AND PRODUCT SUBMENU
 
         #region ARPATTACK
         private void btnARP_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(() => new ArpForm());
+            OpenForm(() => new ArpForm());
         }
 
         #endregion
 
-        #region CoolThings
+        #region Tools
 
         private void btnCoolThings_Click(object sender, EventArgs e)
         {
             btnCoolThings.BackColor = Color.FromArgb(23, 148, 67);
-            showSubMenu(panelSubMenuARPAttack, btnCoolThings);
+            ShowSubMenu(panelSubMenuARPAttack, btnCoolThings);
         }
 
         private void btnWebPage_Click(object sender, EventArgs e)
@@ -248,17 +249,17 @@ namespace SelfishNetv3
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(() => new about());
+            OpenForm(() => new about());
         }
         #endregion
         //------------------------------------------------------------------------------------------------
 
-        #region SubMenuReportes
+        #region Reports SubMenu
 
         private void btnInfo_Click(object sender, EventArgs e)
         {
             btnInfo.BackColor = Color.FromArgb(23, 148, 67);
-            showSubMenu(panelSubMenuInfo, btnInfo);
+            ShowSubMenu(panelSubMenuInfo, btnInfo);
         }
 
         #endregion
@@ -273,28 +274,28 @@ namespace SelfishNetv3
 
         #endregion
 
-        //METODO PARA ABRIR FORMULARIOS DENTRO DEL PANEL
-        public void AbrirFormulario<MiForm>(Func<MiForm> metodofactory) where MiForm : Form
+        // METHOD TO OPEN FORMS INSIDE THE PANEL
+        public void OpenForm<TForm>(Func<TForm> formFactory) where TForm : Form
         {
-            Form formulario = panelformularios.Controls.OfType<MiForm>().FirstOrDefault();
-            formulario = panelformularios.Controls.OfType<MiForm>().FirstOrDefault();//Busca en la colecion el formulario
-            //si el formulario/instancia no existe
-            if (formulario == null)
+            Form form = panelformularios.Controls.OfType<TForm>().FirstOrDefault();
+            
+            // if the form/instance does not exist
+            if (form == null)
             {
-                formulario = metodofactory();
-                formulario.TopLevel = false;
-                formulario.FormBorderStyle = FormBorderStyle.None;
-                formulario.Dock = DockStyle.Fill;
-                panelformularios.Controls.Add(formulario);
-                panelformularios.Tag = formulario;
-                formulario.Show();
-                formulario.BringToFront();
-                formulario.FormClosed += new FormClosedEventHandler(CloseForms);
+                form = formFactory();
+                form.TopLevel = false;
+                form.FormBorderStyle = FormBorderStyle.None;
+                form.Dock = DockStyle.Fill;
+                panelformularios.Controls.Add(form);
+                panelformularios.Tag = form;
+                form.Show();
+                form.BringToFront();
+                form.FormClosed += new FormClosedEventHandler(CloseForms);
             }
-            //si el formulario/instancia existe
+            // if the form/instance exists
             else
             {
-                formulario.BringToFront();
+                form.BringToFront();
             }
         }
         private void CloseForms(object sender, FormClosedEventArgs e)

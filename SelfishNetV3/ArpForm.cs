@@ -6,27 +6,6 @@ using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
-namespace SelfishNetv3
-{
-#pragma warning disable  // Falta el comentario XML para el tipo o miembro visible públicamente
-    public delegate void delegateOnNewPC(PC pc);
-
-    public delegate void DelUpdateName(PC pc, string str);
-    public partial class ArpForm : Form
-    {
-
-        public int timerStatCount;
-        public Driver driver;
-        public PcList pcs;
-        public CArp cArp;
-        public CAdapter cAdapter;
-        public byte[] routerIP;
-        public object[] resolvState;
-        public NetworkInterface nicNet;
         public static ArpForm instance;
         public ArpForm()
         {
